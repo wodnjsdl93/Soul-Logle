@@ -12,6 +12,8 @@ public class Player : MonoBehaviour
 
     private PlayerStateMachine stateMachine;
 
+    public ForceReceiver ForceReceiver { get; private set; }
+
     private void Awake()
     {
         AnimationData.Initialize();
@@ -21,6 +23,8 @@ public class Player : MonoBehaviour
 
         stateMachine = new PlayerStateMachine(this);
         stateMachine.ChangeState(stateMachine.IdleState);
+
+        ForceReceiver = GetComponent<ForceReceiver>();
     }
 
     private void Start()
