@@ -19,6 +19,8 @@ public class PlayerStateMachine : StateMachine
     public PlayerWalkState WalkState { get; }
     public PlayerRunState RunState { get; }
     public PlayerJumpState JumpState { get;}
+    public PlayerFallState FallState { get; }
+
 
     public PlayerStateMachine(Player player)
     {
@@ -29,6 +31,7 @@ public class PlayerStateMachine : StateMachine
         RunState = new PlayerRunState(this);
 
         JumpState = new PlayerJumpState(this);
+        FallState = new PlayerFallState(this);
         MainCamTransform = Camera.main.transform;
 
         MovementSpeed = player.Data.GroundData.BaseSpeed;
