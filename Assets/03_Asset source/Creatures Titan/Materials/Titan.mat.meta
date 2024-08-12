@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: e1749f1e48552f743ba187541ecfa00c
+timeCreated: 1482915035
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 79302
+  packageName: Creature Titan
+  packageVersion: 1.0
+  assetPath: Assets/Creatures Titan/Materials/Titan.mat
+  uploadId: 153295

@@ -5,9 +5,15 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
+  - enabled: 0
+    path: Assets/01_Scenes/SampleScene.unity
     guid: 99c9720ab356a0642a771bea13969a05
+  - enabled: 1
+    path: Assets/01_Scenes/Enemy.unity
+    guid: f2d562b87bd65450fb1fbbb0ae796dbb
+  - enabled: 1
+    path: Assets/03_Asset source/Advance Studios/Medieval Castle/Scenes/Demo.unity
+    guid: 4e0b2b51b6662be4f9d98e95645aff16
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: ceed8cd0f0068412a94d2eefb977fa17, type: 3}
   m_UseUCBPForAssetBundles: 0

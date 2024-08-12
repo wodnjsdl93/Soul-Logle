@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: aa817058b3fdd29429b34f065a7a8770
+timeCreated: 1482915475
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 79302
+  packageName: Creature Titan
+  packageVersion: 1.0
+  assetPath: Assets/Creatures Titan/Titan.controller
+  uploadId: 153295
