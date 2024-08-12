@@ -1,16 +1,33 @@
-using UnityEngine;
-
-public class PlayerJumpState : MonoBehaviour
+public class PlayerJumpState : PlayerAirState
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public PlayerJumpState(PlayerStateMachine playerStateMachine) : base(playerStateMachine)
     {
-        
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void Enter()
     {
-        
+        stateMachine.JumpForce = stateMachine.Player.Data.AirData.JumpForce;
+        stateMachine.Player.ForceReceiver.Jump(stateMachine.JumpForce);
+
+        base.Enter();
+
+        StartAnimation(stateMachine.Player.AnimationData.JumpParameterHash);
+    }
+
+    public override void Exit()
+    {
+        base.Exit();
+        StopAnimation(stateMachine.Player.AnimationData.JumpParameterHash);
+    }
+
+    public override void PhysicsUpdate()
+    {
+        base.PhysicsUpdate();
+
+        if(stateMachine.Player.Controller.velocity.y <= 0)
+        {
+            stateMachine.ChangeState(stateMachine.IdleState);
+            return;
+        }
     }
 }

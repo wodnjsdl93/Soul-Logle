@@ -106,10 +106,10 @@ public class PlayerBaseState : IState
         return forward * stateMachine.MovementInput.y + right * stateMachine.MovementInput.x; 
     }
     
-    private void Move(Vector3 direction)
+    private void Move(Vector3 Movementdirection)
     {
         float movementSpeed = GetMovementSpeed();
-        stateMachine.Player.Controller.Move((direction* movementSpeed) + stateMachine.Player.ForceReceiver.Movement * Time.deltaTime);
+        stateMachine.Player.Controller.Move((Movementdirection* movementSpeed) + stateMachine.Player.ForceReceiver.Movement * Time.deltaTime);
     }
 
     private void Rotate(Vector3 direction)
