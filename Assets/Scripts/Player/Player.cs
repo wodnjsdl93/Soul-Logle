@@ -10,7 +10,7 @@ public class Player : MonoBehaviour
     public PlayerController Input { get; private set; }
     public CharacterController Controller { get; private set; }
 
-    private PlayerStateMachine StateMachine;
+    private PlayerStateMachine stateMachine;
 
     private void Awake()
     {
@@ -20,7 +20,7 @@ public class Player : MonoBehaviour
 		Controller = GetComponent<CharacterController>();
 
         stateMachine = new PlayerStateMachine(this);
-        stateMachine.ChangState(stateMachine.IdleState);
+        stateMachine.ChangeState(stateMachine.IdleState);
     }
 
     private void Start()
