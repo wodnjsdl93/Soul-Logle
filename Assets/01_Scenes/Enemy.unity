@@ -11522,6 +11522,14 @@ PrefabInstance:
       propertyPath: m_Constraints
       value: 32
       objectReference: {fileID: 0}
+    - target: {fileID: 6676943369015769104, guid: a5fd35b920af99041b336461fb7b4c04, type: 3}
+      propertyPath: m_IsKinematic
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6826763737016797183, guid: a5fd35b920af99041b336461fb7b4c04, type: 3}
+      propertyPath: m_Constraints
+      value: 32
+      objectReference: {fileID: 0}
     - target: {fileID: 7561547464048517155, guid: a5fd35b920af99041b336461fb7b4c04, type: 3}
       propertyPath: hpBar
       value: 
@@ -11537,6 +11545,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4361912803858356531, guid: a5fd35b920af99041b336461fb7b4c04, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8110373640275965727}
+    - targetCorrespondingSourceObject: {fileID: 4361912803858356531, guid: a5fd35b920af99041b336461fb7b4c04, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8110373640275965735}
   m_SourcePrefab: {fileID: 100100000, guid: a5fd35b920af99041b336461fb7b4c04, type: 3}
 --- !u!4 &7891413390374165138
 Transform:
@@ -11793,6 +11804,22 @@ MonoBehaviour:
   changeDirectionInterval: 2
   stopDurationMin: 1
   stopDurationMax: 3
+--- !u!114 &8110373640275965735
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1362426222}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4db57bbea99bfc5468ad7a3ccaa71e6b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 2093081213}
+  speed: 5
+  chargeDistance: 10
+  chargeDuration: 2
 --- !u!4 &8557968633079362179 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5785242846073902511, guid: 8c2cabd72c2871e4fa25d9761a86fef5, type: 3}
