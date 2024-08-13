@@ -16,9 +16,9 @@ public class MonsterTracking : MonoBehaviour
         float distance = Vector3.Distance(transform.position, player.position);
         if (distance <= range)
         {
-            transform.LookAt(player);
+            //transform.LookAt(new Vector3(player.position.x, transform.position.y, player.position.z));
  
-            transform.position = Vector3.MoveTowards(transform.position, player.position, speed * Time.deltaTime);
+            //transform.position = Vector3.MoveTowards(transform.position, player.position, speed * Time.deltaTime);
         }
     }
 

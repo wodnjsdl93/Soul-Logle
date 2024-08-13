@@ -10640,7 +10640,7 @@ Transform:
   m_GameObject: {fileID: 2093081208}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -41.71, y: 1.01, z: -4.43}
+  m_LocalPosition: {x: -40.75, y: 1.01, z: -5.36}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -11518,6 +11518,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Titan
       objectReference: {fileID: 0}
+    - target: {fileID: 6111847916740319772, guid: a5fd35b920af99041b336461fb7b4c04, type: 3}
+      propertyPath: m_StoppingDistance
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 6676943369015769104, guid: a5fd35b920af99041b336461fb7b4c04, type: 3}
       propertyPath: m_Constraints
       value: 32
@@ -11538,7 +11542,8 @@ PrefabInstance:
       propertyPath: hpSlider
       value: 
       objectReference: {fileID: 1275999129}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 6676943369015769104, guid: a5fd35b920af99041b336461fb7b4c04, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
