@@ -1,6 +1,8 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
+using System;
 
 public class TitanController : MonoBehaviour
 {
@@ -10,16 +12,17 @@ public class TitanController : MonoBehaviour
     // 몬스터의 상태를 저장하는 변수
     public State state = State.IDLE;
     
-  
-
+ // HP 바를 연결하기 위한 Slider 변수
+    public Slider hpSlider;
  
 
     // 공격사정거리
     [SerializeField] private float attackDist =  3.0f;
     // 추적사정거리
     [SerializeField] private float traceDist = 20.0f;
+    [SerializeField] private float BossinitHp = 100.0f;
+    [SerializeField] private float BosscurrHp = 100.0f;
 
-    // 주인공 캐릭터의 Transform 컴포넌트를 저장할 변수
     private Transform playerTr;
     // 몬스터의 Transform
     private Transform monsterTr;
@@ -27,7 +30,6 @@ public class TitanController : MonoBehaviour
     private Animator anim;
 
     private bool isDie = false;
-    private int hp = 250;
 
     // Animator View의 Parameter Hash값을 미리 추출
     private readonly int hashIsTrace = Animator.StringToHash("IsTrace");
@@ -56,6 +58,10 @@ public class TitanController : MonoBehaviour
 
         StartCoroutine(CheckMonsterState());
         StartCoroutine(MonsterAction());
+
+        BosscurrHp = BossinitHp;
+        hpSlider.maxValue = BossinitHp;
+        hpSlider.value = BosscurrHp;
     }
 
     IEnumerator MonsterAction()
@@ -68,6 +74,10 @@ public class TitanController : MonoBehaviour
                 case State.IDLE:
                     agent.isStopped = true;
                     anim.SetBool(hashIsTrace, false);
+                    anim.SetBool(hashIsAttack, false);
+
+             
+                
                     break;
 
                 case State.TRACE:
@@ -88,6 +98,7 @@ public class TitanController : MonoBehaviour
                     agent.isStopped = true;
                     isDie = true;
                     break;
+                       
             }
                 yield return new WaitForSeconds(0.3f);
         }
@@ -119,44 +130,88 @@ public class TitanController : MonoBehaviour
             yield return new WaitForSeconds(0.3f);
         }
     }
-
+  
+    
     void OnCollisionEnter(Collision coll)
     {
-        if (coll.collider.CompareTag("BULLET"))
+       if (BosscurrHp > 0.0f && coll.gameObject.CompareTag("PUNCH"))
         {
-            Destroy(coll.gameObject);
-            // Hit Reaction...
-            anim.SetTrigger(hashHit);
+            BosscurrHp -= 10.0f;
 
-            hp -= 20;
-            if (hp <= 0)
+    
+
+            if (BosscurrHp <= 0.0f)
+            
             {
                 state = State.DIE;
             }
         }
     }
 
+
     public void OnDamage()
     {
         // Hit Reaction...
         anim.SetTrigger(hashHit);
 
-        hp -= 20;
-        if (hp <= 0)
+        BosscurrHp -= 20;
+        if (BosscurrHp <= 0)
         {
             state = State.DIE;
         }
     }
 
-
-    public void YouWin()
+    public void TakeDamage(float damage)
     {
-        // 공격 애니메이션 중지
-        // Dance
-        StopAllCoroutines();
-        agent.isStopped = true;
+        BosscurrHp -= damage;
+        BosscurrHp = Mathf.Clamp(BosscurrHp , 0 , BossinitHp);
+        hpSlider.value = BosscurrHp;
+         if (BosscurrHp <= 0)
+        {
+            state = State.DIE;
+        }
+    }
+        public void Heal(float amount)
+    {
+        BosscurrHp += amount;
 
-        anim.SetTrigger("PlayerDie");
-    } 
-    
+        // 체력이 최대 체력(initHp)을 초과하지 않도록 설정합니다.
+        BosscurrHp = Mathf.Clamp(BosscurrHp, 0, BossinitHp);
+
+        // HP 바를 업데이트합니다.
+        hpSlider.value = BosscurrHp;
+        
+    }
+
+    void Update()
+{
+    // 테스트용으로 체력을 10씩 감소시킵니다.
+    if (Input.GetKeyDown(KeyCode.Space))
+    {
+        TakeDamage(10);
+    }
+
+    // 테스트용으로 체력을 5씩 회복시킵니다.
+    if (Input.GetKeyDown(KeyCode.H))
+    {
+        Heal(5);
+    }
+     if (BosscurrHp <= 0)
+        {
+            state = State.DIE;
+        }
+    }
 }
+
+
+//     public void YouWin()
+//     {
+//         // 공격 애니메이션 중지
+//         // Dance
+//         StopAllCoroutines();
+//         agent.isStopped = true;
+
+//         anim.SetTrigger("PlayerDie");
+//     } 
+    
+// }
