@@ -19,6 +19,14 @@ using UnityEngine;
 public partial class @PlayerInputs: IInputActionCollection2, IDisposable
 {
     public InputActionAsset asset { get; }
+     public PlayerActions playerActions { get; private set; }
+     private void Awake()
+    {
+        // PlayerInputs 초기화 코드
+        playerActions = new PlayerActions();
+        playerActions.Enable(); // Assuming you need to enable actions
+    }
+
     public @PlayerInputs()
     {
         asset = InputActionAsset.FromJson(@"{

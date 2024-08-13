@@ -13,12 +13,12 @@ public class ForceReceiver : MonoBehaviour
 
     private void Start()
     {
-        controller = GetComponent<CharacterController>();
+         controller = GetComponent<CharacterController>();
     }
 
     void Update()
     {
-        if(verticalVelocity < 0f && controller.isGrounded)
+        if (verticalVelocity < 0f && controller.isGrounded)
         {
             verticalVelocity = Physics.gravity.y * Time.deltaTime;
         }

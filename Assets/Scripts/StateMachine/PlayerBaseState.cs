@@ -14,6 +14,19 @@ public class PlayerBaseState : IState
 
     public virtual void Enter()
     {
+        Debug.Log("Entering State: " + GetType().Name);
+
+        if (stateMachine.Player == null)
+        {
+            Debug.LogError("StateMachine.Player is not initialized in Enter.");
+            return;
+        }
+
+        if (stateMachine.Player.Input == null)
+        {
+            Debug.LogError("StateMachine.Player.Input is not initialized in Enter.");
+            return;
+        }
        AddInputActionsCallbacks();
     }
 
@@ -24,7 +37,7 @@ public class PlayerBaseState : IState
 
     protected virtual void AddInputActionsCallbacks()
     {
-        PlayerController input = stateMachine.Player.Input;
+        PlayerController input = stateMachine.Player.Input;        
         input.playerActions.Movement.canceled += OnMovementCanceled;
         input.playerActions.Run.started += OnRunStarted; 
         input.playerActions.Jump.started += OnJumpStarted;
@@ -106,10 +119,10 @@ public class PlayerBaseState : IState
         return forward * stateMachine.MovementInput.y + right * stateMachine.MovementInput.x; 
     }
     
-    private void Move(Vector3 Movementdirection)
+    private void Move(Vector3 MovementDirection)
     {
         float movementSpeed = GetMovementSpeed();
-        stateMachine.Player.Controller.Move((Movementdirection* movementSpeed) + stateMachine.Player.ForceReceiver.Movement * Time.deltaTime);
+        stateMachine.Player.Controller.Move((MovementDirection* movementSpeed) + stateMachine.Player.ForceReceiver.Movement * Time.deltaTime);
     }
 
     private void Rotate(Vector3 direction)
@@ -127,7 +140,4 @@ public class PlayerBaseState : IState
         float movementSpeed = stateMachine.MovementSpeed * stateMachine.MovementSpeedModifier;
         return movementSpeed;
     }
-    
-
-
 }
