@@ -1,6 +1,7 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
-public class PlayerBaseState : MonoBehaviour
+public class PlayerBaseState : IState
 {
     protected PlayerStateMachine stateMachine;
     protected readonly PlayerGroundData groundData;
@@ -21,6 +22,31 @@ public class PlayerBaseState : MonoBehaviour
         RemoveInputActionsCallbacks();
     }
 
+    protected virtual void AddInputActionsCallbacks()
+    {
+        PlayerController input = stateMachine.Player.Input;
+        input.playerActions.Movement.canceled += OnMovementCanceled;
+        input.playerActions.Run.started += OnRunStarted;    
+    }
+
+    protected virtual void RemoveInputActionsCallbacks()
+    {
+        PlayerController input = stateMachine.Player.Input;
+        input.playerActions.Movement.canceled -= OnMovementCanceled;
+        input.playerActions.Run.started -= OnRunStarted;
+
+    }
+
+    protected virtual void OnRunStarted(InputAction.CallbackContext context)
+    {
+
+    }
+
+    protected virtual void OnMovementCanceled(InputAction.CallbackContext context)
+    {
+
+    }
+
     public virtual void HandleInput()
     {
         ReadMovementInput();
@@ -30,9 +56,10 @@ public class PlayerBaseState : MonoBehaviour
     {
 
     }
-    void Update()
+
+    public virtual void Update()
     {
-        
+        Move();
     }
 
     protected void StartAnimation(int animationHash)
@@ -44,7 +71,7 @@ public class PlayerBaseState : MonoBehaviour
     {
         stateMachine.Player.Animator.SetBool(animationHash, false);
     }
-
+    
     private void ReadMovementInput()
     {
         stateMachine.MovementInput = stateMachine.Player.Input.playerActions.Movement.ReadValue<Vector2>();
@@ -94,5 +121,4 @@ public class PlayerBaseState : MonoBehaviour
         float movementSpeed = stateMachine.MovementSpeed * stateMachine.MovementSpeedModifier;
         return movementSpeed;
     }
-
 }
