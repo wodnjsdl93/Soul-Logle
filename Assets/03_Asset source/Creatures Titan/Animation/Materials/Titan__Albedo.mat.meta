@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 9c187a0091c87ab498baeb57b00fa974
+timeCreated: 1482915017
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 79302
+  packageName: Creature Titan
+  packageVersion: 1.0
+  assetPath: Assets/Creatures Titan/Animation/Materials/Titan__Albedo.mat
+  uploadId: 153295
