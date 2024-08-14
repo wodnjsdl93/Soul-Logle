@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -25,36 +27,37 @@ public class PlayerBaseState : IState
     protected virtual void AddInputActionsCallbacks()
     {
         PlayerController input = stateMachine.Player.Input;
-        input.playerActions.Movement.canceled += OnMovementCanceled;
+        input.playerActions.Movement.performed += OnMovementInput;
+        input.playerActions.Movement.canceled += OnMovementInput;
         input.playerActions.Run.started += OnRunStarted;    
     }
 
     protected virtual void RemoveInputActionsCallbacks()
     {
         PlayerController input = stateMachine.Player.Input;
-        input.playerActions.Movement.canceled -= OnMovementCanceled;
+        input.playerActions.Movement.performed -= OnMovementInput;
+        input.playerActions.Movement.canceled -= OnMovementInput;
         input.playerActions.Run.started -= OnRunStarted;
-
     }
 
     protected virtual void OnRunStarted(InputAction.CallbackContext context)
     {
-
     }
 
-    protected virtual void OnMovementCanceled(InputAction.CallbackContext context)
+    protected virtual void OnMovementInput(InputAction.CallbackContext context)
     {
-
+        // 이동 입력을 처리
+        stateMachine.MovementInput = context.ReadValue<Vector2>();
     }
 
     public virtual void HandleInput()
     {
+        // 입력을 읽기만 함
         ReadMovementInput();
     }
 
     public virtual void PhysicsUpdate()
     {
-
     }
 
     public virtual void Update()
@@ -74,15 +77,15 @@ public class PlayerBaseState : IState
     
     private void ReadMovementInput()
     {
+        // 이동 입력을 읽기만 함
         stateMachine.MovementInput = stateMachine.Player.Input.playerActions.Movement.ReadValue<Vector2>();
     }
     
     private void Move()
     {
         Vector3 movementDirection = GetMovementDirection();
-
         Rotate(movementDirection);
-
+        // 이동만 처리하고 회전은 마우스 입력에 의해 처리됨
         Move(movementDirection);
     }
     
@@ -103,12 +106,12 @@ public class PlayerBaseState : IState
     private void Move(Vector3 direction)
     {
         float movementSpeed = GetMovementSpeed();
-        stateMachine.Player.Controller.Move((direction* movementSpeed) * Time.deltaTime);
+        stateMachine.Player.Controller.Move((direction * movementSpeed) * Time.deltaTime);
     }
 
     private void Rotate(Vector3 direction)
     {
-        if(direction != Vector3.zero)
+        if (direction != Vector3.zero)
         {
             Transform playerTransform = stateMachine.Player.transform;
             Quaternion targetRotation = Quaternion.LookRotation(direction);
