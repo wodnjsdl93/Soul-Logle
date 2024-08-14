@@ -30,6 +30,8 @@ public class PlayerBaseState : IState
         input.playerActions.Movement.canceled += OnMovementCanceled;
         input.playerActions.Run.started += OnRunStarted; 
         input.playerActions.Jump.started += OnJumpStarted;
+        input.playerActions.Attack.performed += OnAttackPerformed;
+        input.playerActions.Attack.canceled += OnAttackCanceled;
     }
 
     protected virtual void RemoveInputActionsCallbacks()
@@ -38,6 +40,8 @@ public class PlayerBaseState : IState
         input.playerActions.Movement.canceled -= OnMovementCanceled;
         input.playerActions.Run.started -= OnRunStarted;
         input.playerActions.Jump.started -= OnJumpStarted;
+        input.playerActions.Attack.performed -= OnAttackPerformed;
+        input.playerActions.Attack.canceled -= OnAttackCanceled;
     }
 
     protected virtual void OnJumpStarted(InputAction.CallbackContext context)
@@ -52,6 +56,16 @@ public class PlayerBaseState : IState
     protected virtual void OnMovementCanceled(InputAction.CallbackContext context)
     {   
 
+    }
+
+    protected virtual void OnAttackPerformed(InputAction.CallbackContext obj)
+    {
+        stateMachine.IsAttacking = true;
+    }
+
+    protected virtual void OnAttackCanceled(InputAction.CallbackContext obj)
+    {
+        stateMachine.IsAttacking = false;
     }
 
     public virtual void HandleInput()
@@ -125,4 +139,29 @@ public class PlayerBaseState : IState
         float movementSpeed = stateMachine.MovementSpeed * stateMachine.MovementSpeedModifier;
         return movementSpeed;
     }
+
+    protected void ForceMove()
+    {
+        stateMachine.Player.Controller.Move(stateMachine.Player.ForceReceiver.Movement * Time.deltaTime);
+    }
+
+    protected float GetNormalizedTime(Animator animator, string tag)
+    {
+        AnimatorStateInfo currentInfo = animator.GetCurrentAnimatorStateInfo(0);
+        AnimatorStateInfo nextInfo = animator.GetNextAnimatorStateInfo(0);
+
+        if (animator.IsInTransition(0) && nextInfo.IsTag(tag))
+        {
+            return nextInfo.normalizedTime;
+        }
+        else if (!animator.IsInTransition(0) && currentInfo.IsTag(tag))
+        {
+            return currentInfo.normalizedTime;
+        }
+        else
+        {
+            return 0f;
+        }
+    }
+
 }

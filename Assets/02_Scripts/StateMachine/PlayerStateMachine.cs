@@ -7,11 +7,12 @@ public class PlayerStateMachine : StateMachine
     public Player Player { get; }
 
     // States
-    public PlayerIdleState IdleState { get; private set; }
-    public PlayerWalkState WalkState { get; private set; }
-    public PlayerRunState RunState { get; private set; }
-    public PlayerJumpState JumpState { get; private set; }
-    public PlayerFallState FallState { get; private set; }
+    public PlayerIdleState IdleState { get; }
+    public PlayerWalkState WalkState { get;}
+    public PlayerRunState RunState { get;}
+    public PlayerJumpState JumpState { get;}
+    public PlayerFallState FallState { get;}
+    public PlayerComboAttackState ComboAttackState { get; set; }
 
     // 
     public Vector2 MovementInput { get; set; }
@@ -22,6 +23,9 @@ public class PlayerStateMachine : StateMachine
     public float JumpForce { get; set; }
 
     public Transform MainCamTransform { get; set; }
+    
+    public bool IsAttacking { get; set; }
+    public int ComboIndex { get; set; }
 
     public PlayerStateMachine(Player player)
     {
@@ -32,6 +36,8 @@ public class PlayerStateMachine : StateMachine
         RunState = new PlayerRunState(this);
         JumpState = new PlayerJumpState(this);
         FallState = new PlayerFallState(this);
+
+        ComboAttackState = new PlayerComboAttackState(this);
         
         MainCamTransform = Camera.main.transform;
 
