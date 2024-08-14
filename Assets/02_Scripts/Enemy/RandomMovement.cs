@@ -7,6 +7,8 @@ public class RandomMovement : MonoBehaviour
     public float changeDirectionInterval = 2f; // 방향 변경 간격
     public float stopDurationMin = 1f; // 최소 멈춤 시간
     public float stopDurationMax = 3f; // 최대 멈춤 시간
+    public float obstacleDetectionDistance = 5f; // 장애물 감지 거리
+    public LayerMask obstacleLayer; // 장애물 레이어
 
     private Vector3 targetPosition;
     private float changeDirectionTimer;
@@ -32,6 +34,9 @@ public class RandomMovement : MonoBehaviour
 
         if (isMoving)
         {
+            // 장애물 감지 및 회피
+            DetectAndAvoidObstacles();
+
             // 목표 위치로 이동
             MoveTowardsTarget();
 
@@ -51,6 +56,7 @@ public class RandomMovement : MonoBehaviour
                 {
                     SetRandomTargetPosition();
                     changeDirectionTimer = changeDirectionInterval;
+                    stopTimer = GetRandomStopDuration();
                 }
             }
 
@@ -78,8 +84,8 @@ public class RandomMovement : MonoBehaviour
     void SetRandomTargetPosition()
     {
         float x = Random.Range(-moveRange, moveRange);
-        float y = Random.Range(-moveRange, moveRange);
         float z = Random.Range(-moveRange, moveRange);
+        float y = transform.position.y; // Y축 고정
         targetPosition = new Vector3(x, y, z);
     }
 
@@ -94,6 +100,22 @@ public class RandomMovement : MonoBehaviour
         {
             Quaternion targetRotation = Quaternion.LookRotation(direction);
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, step * moveSpeed);
+        }
+    }
+
+    void DetectAndAvoidObstacles()
+    {
+        RaycastHit hit;
+        Vector3 direction = (targetPosition - transform.position).normalized;
+        if (Physics.Raycast(transform.position, direction, out hit, obstacleDetectionDistance, obstacleLayer))
+        {
+            // 장애물 감지
+            Debug.Log("Obstacle detected! Avoiding...");
+            
+            // 장애물 회피를 위한 새로운 목표 위치 설정
+            Vector3 avoidanceDirection = Vector3.Reflect(direction, hit.normal);
+            avoidanceDirection.y = 0; // Y축 회피 방지
+            targetPosition = transform.position + avoidanceDirection * moveRange;
         }
     }
 
