@@ -84,8 +84,7 @@ public class PlayerBaseState : IState
     private void Move()
     {
         Vector3 movementDirection = GetMovementDirection();
-        Rotate(movementDirection);
-        // 이동만 처리하고 회전은 마우스 입력에 의해 처리됨
+        // 회전은 마우스 입력에 의해 처리됨
         Move(movementDirection);
     }
     
@@ -107,16 +106,6 @@ public class PlayerBaseState : IState
     {
         float movementSpeed = GetMovementSpeed();
         stateMachine.Player.Controller.Move((direction * movementSpeed) * Time.deltaTime);
-    }
-
-    private void Rotate(Vector3 direction)
-    {
-        if (direction != Vector3.zero)
-        {
-            Transform playerTransform = stateMachine.Player.transform;
-            Quaternion targetRotation = Quaternion.LookRotation(direction);
-            playerTransform.rotation = Quaternion.Slerp(playerTransform.rotation, targetRotation, stateMachine.RotationDamping * Time.deltaTime);
-        }
     }
 
     private float GetMovementSpeed()
