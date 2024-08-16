@@ -22,7 +22,7 @@ public class Weapon : MonoBehaviour
 
         alreadyColliderWith.Add(other);
 
-        if(other.TryGetComponent(out Health health))
+        if(other.TryGetComponent(out PlayerHealth health))
         {
             health.TakeDamage(damage);
         }
