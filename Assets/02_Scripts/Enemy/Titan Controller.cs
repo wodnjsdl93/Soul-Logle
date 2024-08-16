@@ -14,10 +14,10 @@ public class TitanController : MonoBehaviour
 
     [SerializeField] private float attackDist = 10.0f;
     [SerializeField] private float traceDist = 20.0f;
-    [SerializeField] private float moveSpeed = 4f;
+    [SerializeField] private float moveSpeed = 3.0f;
 
-    [SerializeField] private float BossinitHp = 100.0f;
-    [SerializeField] private float BosscurrHp = 100.0f;
+    [SerializeField] private float BossinitHp = 500.0f;
+    [SerializeField] private float BosscurrHp = 500.0f;
 
     [SerializeField] private float moveRange = 10f;
     [SerializeField] private float changeDirectionInterval = 2f;

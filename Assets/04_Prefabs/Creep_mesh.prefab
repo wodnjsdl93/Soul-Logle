@@ -713,12 +713,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2769875903353524370}
-  - component: {fileID: 2270599332884929144}
+  - component: {fileID: 8018444708558102528}
   - component: {fileID: 189476800473663536}
   - component: {fileID: 2010980977472403890}
   m_Layer: 0
   m_Name: Creep_mesh
-  m_TagString: Untagged
+  m_TagString: BOSS
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -731,7 +731,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3259273358679558696}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -19.14, y: 0, z: -0.6}
   m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_ConstrainProportionsScale: 1
@@ -740,7 +740,7 @@ Transform:
   - {fileID: 7006824220235974512}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2270599332884929144
+--- !u!114 &8018444708558102528
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -749,7 +749,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3259273358679558696}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 167cc79b687facf469bd5944775ecbe3, type: 3}
+  m_Script: {fileID: 11500000, guid: 4f4b0e91ddbca9c4da7821da71d74429, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   state: 0
@@ -757,8 +757,8 @@ MonoBehaviour:
   attackDist: 10
   traceDist: 20
   moveSpeed: 4
-  BossinitHp: 100
-  BosscurrHp: 100
+  BossinitHp: 300
+  BosscurrHp: 300
   moveRange: 10
   changeDirectionInterval: 2
   stopDurationMin: 1

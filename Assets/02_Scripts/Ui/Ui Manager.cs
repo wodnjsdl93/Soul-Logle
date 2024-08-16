@@ -13,7 +13,7 @@ public class UiManager : MonoBehaviour
 
     public void OnStartButtonClick()
     {
-        SceneManager.LoadScene("Game");
+        SceneManager.LoadScene("STAGE1");
         SceneManager.LoadScene("Player", LoadSceneMode.Additive);
     }
 }
