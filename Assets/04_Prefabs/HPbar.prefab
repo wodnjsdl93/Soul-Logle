@@ -289,7 +289,7 @@ GameObject:
   - component: {fileID: 6402442063567165814}
   - component: {fileID: 3776316474651568645}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: HPbar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
