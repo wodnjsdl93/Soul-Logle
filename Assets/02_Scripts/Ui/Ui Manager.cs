@@ -17,6 +17,7 @@ public class UiManager : MonoBehaviour
     public void OnStartButtonClick()
     {
         SceneManager.LoadScene("Enemy");
+
         SceneManager.LoadScene("Player", LoadSceneMode.Additive);
     }
     public void OnsettingButtonClick()

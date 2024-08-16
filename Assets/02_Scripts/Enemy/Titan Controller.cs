@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class TitanController : MonoBehaviour
 {
@@ -11,12 +12,12 @@ public class TitanController : MonoBehaviour
 
     public Slider hpSlider;
 
-    [SerializeField] private float attackDist = 3.0f;
+    [SerializeField] private float attackDist = 10.0f;
     [SerializeField] private float traceDist = 20.0f;
-    [SerializeField] private float moveSpeed = 4f;
+    [SerializeField] private float moveSpeed = 3.0f;
 
-    [SerializeField] private float BossinitHp = 100.0f;
-    [SerializeField] private float BosscurrHp = 100.0f;
+    [SerializeField] private float BossinitHp = 500.0f;
+    [SerializeField] private float BosscurrHp = 500.0f;
 
     [SerializeField] private float moveRange = 10f;
     [SerializeField] private float changeDirectionInterval = 2f;
@@ -43,6 +44,8 @@ public class TitanController : MonoBehaviour
     private float changeDirectionTimer;
     private float stopTimer;
     private float chargeTime = 0f;
+
+    private Vector3 chargeDirection; // 돌진할 방향을 저장
 
     // Hash parameters
     private readonly int hashIsTrace = Animator.StringToHash("IsTrace");
@@ -71,28 +74,42 @@ public class TitanController : MonoBehaviour
     }
 
     void Update()
+{
+    // 돌진 중에는 다른 상태 처리를 하지 않음
+    if (isCharging)
     {
-        if (isDie) return;
-
-        if (state == State.TRACE || state == State.ATTACK || state == State.CHARGE)
+        ChargeTowardsDirection(); // 특정 방향으로 돌진
+        chargeTime += Time.deltaTime;
+        
+        if (chargeTime >= chargeDuration)
         {
-            HandleChaseOrAttack();
+            StopCharge(); // 일정 시간이 지나면 돌진 중지
         }
-        else if (state == State.IDLE)
-        {
-            HandleMovement();
-        }
-
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            TakeDamage(10);
-        }
-
-        if (Input.GetKeyDown(KeyCode.H))
-        {
-            Heal(5);
-        }
+        return; // 돌진 중에는 다른 코드 실행하지 않음
     }
+    
+    // 돌진 중이 아닐 때에만 상태에 따라 이동 처리
+    if (state == State.TRACE || state == State.ATTACK || state == State.CHARGE)
+    {
+        HandleChaseOrAttack(); // 추적, 공격 또는 돌진 처리
+    }
+    else if (state == State.IDLE)
+    {
+        HandleMovement(); // 대기 상태에서의 이동 처리
+    }
+
+    // 테스트용 입력 처리
+    if (Input.GetKeyDown(KeyCode.Space))
+    {
+        TakeDamage(10);
+    }
+
+    if (Input.GetKeyDown(KeyCode.H))
+    {
+        Heal(5);
+    }
+}
+
 
     IEnumerator MonsterAction()
     {
@@ -305,20 +322,106 @@ public class TitanController : MonoBehaviour
     {
         return Random.Range(stopDurationMin, stopDurationMax);
     }
+[SerializeField] private string tagToIgnore = "PLAYER";
 
-    void ChargeTowardsPlayer()
-    {
-        isCharging = true;
-        // Perform charging logic, e.g., move towards player with increased speed
-        Vector3 direction = (playerTr.position - transform.position).normalized;
-        float step = chargeSpeed * Time.deltaTime;
-        transform.position = Vector3.MoveTowards(transform.position, playerTr.position, step);
-    }
 
-    void StopCharge()
+private List<Collider> ignoredColliders = new List<Collider>();
+
+void StartCharge()
+{
+    isCharging = true;
+    anim.SetBool(hashIsCharging, true);
+    
+    // NavMeshAgent 경로 탐색 중지
+    agent.isStopped = true;
+
+    // 돌진할 방향 설정 (현재 바라보는 방향)
+    chargeDirection = transform.forward; // 현재 바라보는 방향으로 돌진
+
+    // 돌진 시간을 초기화
+    chargeTime = 0f;
+}
+
+
+void ChargeTowardsDirection()
+{
+    // 돌진 방향으로 이동
+    float step = chargeSpeed * Time.deltaTime;
+
+    // 충돌 처리를 고려하여 이동
+    if (Physics.Raycast(transform.position, chargeDirection, out RaycastHit hit, step, obstacleLayer))
     {
-        isCharging = false;
-        anim.SetBool(hashIsCharging, false);
-        chargeTime = 0f;
+        // 충돌이 감지되면 방향을 조정하거나, 이동을 멈출 수 있음
+        // 여기서는 충돌 처리 코드를 생략
     }
+    else
+    {
+        // 충돌이 없으면 이동
+        transform.position += chargeDirection * step;
+    }
+}
+
+void ChargeTowardsPlayer()
+{
+    isCharging = true;
+    agent.isStopped = true; // NavMeshAgent의 경로 탐색을 중지
+
+    // 돌진 방향으로 이동
+    Vector3 direction = (playerTr.position - transform.position).normalized;
+    float step = chargeSpeed * Time.deltaTime;
+
+    // Collider와 NavMeshAgent 모두를 수동으로 이동
+    transform.position = Vector3.MoveTowards(transform.position, playerTr.position, step);
+}
+
+void StopCharge()
+{
+    isCharging = false;
+    anim.SetBool(hashIsCharging, false);
+
+    // NavMeshAgent 다시 활성화
+    agent.isStopped = false;
+    agent.ResetPath(); // 경로 초기화
+
+    // 돌진 후 상태 전환 로직
+    float distanceToPlayer = Vector3.Distance(transform.position, playerTr.position);
+
+    if (distanceToPlayer <= attackDist)
+    {
+        state = State.ATTACK;
+    }
+    else if (distanceToPlayer <= traceDist)
+    {
+        state = State.TRACE;
+    }
+    else
+    {
+        state = State.IDLE;
+    }
+}
+
+
+
+void IgnoreCollisionWithTag(bool shouldIgnore)
+{
+    Collider[] colliders = FindObjectsOfType<Collider>();
+
+    foreach (Collider coll in colliders)
+    {
+        if (coll.CompareTag(tagToIgnore))
+        {
+            Physics.IgnoreCollision(GetComponent<Collider>(), coll, shouldIgnore);
+
+            if (shouldIgnore)
+            {
+                ignoredColliders.Add(coll);
+            }
+            else
+            {
+                ignoredColliders.Remove(coll);
+            }
+        }
+    }
+}
+
 }
