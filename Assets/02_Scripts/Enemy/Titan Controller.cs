@@ -200,6 +200,16 @@ public class TitanController : MonoBehaviour
             state = State.DIE;
         }
     }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("WEAPON"))
+        {
+            // 플레이어의 무기에 부딪히면 데미지를 받음
+            int damage = 20;  // 예시로 20 데미지 설정
+            TakeDamage(damage);
+        }
+    }
+
 
     public void Heal(float amount)
     {
